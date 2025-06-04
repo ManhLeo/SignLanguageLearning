@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Practice Recognition - Sign Language Learning{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Practice Sign Language Recognition</h5>
+                </div>
+                <div class="card-body">
+                    <div class="video-container mb-4">
+                        <video id="video" autoplay playsinline></video>
+                        <div id="spinnerOverlay" class="spinner-overlay d-none">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                    <div class="text-center mb-4">
+                        <button id="startButton" class="btn btn-primary btn-recognition me-2">Start Camera</button>
+                        <button id="stopButton" class="btn btn-danger btn-recognition" disabled>Stop Camera</button>
+                    </div>
+                    <div id="recognitionResult" class="alert alert-info d-none">
+                        <h5 class="alert-heading">Recognition Result</h5>
+                        <p id="resultText" class="mb-0"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Tips for Better Recognition</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="mb-0">
+                        <li>Ensure good lighting in your environment</li>
+                        <li>Keep your hands within the camera frame</li>
+                        <li>Make clear and distinct signs</li>
+                        <li>Maintain a steady position</li>
+                        <li>Keep your background simple and uncluttered</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/recognition.js' %}"></script>
+{% endblock %} 

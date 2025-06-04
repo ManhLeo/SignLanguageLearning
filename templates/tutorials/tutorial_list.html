@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Tutorials - Sign Language Learning{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1>Sign Language Tutorials</h1>
+        </div>
+        <div class="col-md-4">
+            <form action="{% url 'tutorials:search' %}" method="get" class="d-flex">
+                <input type="search" name="q" class="form-control me-2" placeholder="Search tutorials...">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Categories</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% for category in categories %}
+                        <a href="{% url 'tutorials:by_category' category.id %}" class="list-group-item list-group-item-action">
+                            {{ category.name }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Difficulty Levels</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% for difficulty in difficulty_levels %}
+                        <a href="{% url 'tutorials:by_difficulty' difficulty.id %}" class="list-group-item list-group-item-action">
+                            {{ difficulty.name }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for tutorial in tutorials %}
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="{{ tutorial.thumbnail.url }}" class="card-img-top" alt="{{ tutorial.title }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ tutorial.title }}</h5>
+                                <p class="card-text">{{ tutorial.description|truncatewords:20 }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-primary">{{ tutorial.category.name }}</span>
+                                    <span class="badge bg-secondary">{{ tutorial.difficulty.name }}</span>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a href="{% url 'tutorials:detail' tutorial.id %}" class="btn btn-primary w-100">Watch Tutorial</a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-12">
+                        <p class="text-muted">No tutorials available.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

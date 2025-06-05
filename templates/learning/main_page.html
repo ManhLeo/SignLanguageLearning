@@ -1,0 +1,239 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignLearn - Học Ngôn Ngữ Ký Hiệu</title>
+    <link rel="stylesheet" href="{% static 'css/main_page.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            📝 SignLearn
+        </div>
+        <nav class="nav">
+            <a href="{% url 'learning:main_page' %}" class="nav-item active">🏠 Trang chủ</a>
+            <a href="{% url 'tutorials:topic' %}" class="nav-item">📚 Học tập</a>
+            <a href="./practice.html" class="nav-item">🧠 Luyện tập</a>
+            <a href="{% url 'recognition:home' %}" class="nav-item">🤖 AI</a>
+            <a href="./profile.html" class="nav-item">📊 Thống kê</a>
+        </nav>
+        <div class="user-actions">
+            <button class="notification-btn">🔔</button>
+            {% if user_profile.profile_picture %}
+                <img src="{{ user_profile.profile_picture.url }}" alt="User Avatar" class="user-avatar">
+            {% else %}
+                <div class="user-avatar">{{ user.username|first|upper }}</div>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <form action="{% url 'accounts:logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline">Đăng xuất</button>
+                </form>
+            {% endif %}
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="welcome-section">
+            <div class="welcome-message">
+                <h1>Xin chào, {{ user.get_full_name|default:user.username }}</h1>
+                <p>Chào mừng bạn đến với SignLearn</p>
+            </div>
+        </section>
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon purple">📚</div>
+                <div class="stat-content">
+                    <h3>Bài học hoàn thành</h3>
+                    <div class="stat-value">24 bài</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon blue">⏰</div>
+                <div class="stat-content">
+                    <h3>Thời gian học</h3>
+                    <div class="stat-value">12 giờ</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">🏆</div>
+                <div class="stat-content">
+                    <h3>Điểm thành tích</h3>
+                    <div class="stat-value">850 điểm</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">📅</div>
+                <div class="stat-content">
+                    <h3>Ngày học liên tiếp</h3>
+                    <div class="stat-value">7 ngày</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-grid">
+            <div class="feature-card" onclick="location.href='{% url 'tutorials:vd_vocabulary' %}'">
+                <div class="feature-icon blue">📖</div>
+                <div class="feature-content">
+                    <h3>Học Tập Ngôn Ngữ Ký Hiệu</h3>
+                    <p>Bắt đầu học các bài học cơ bản</p>
+                </div>
+            </div>
+            <div class="feature-card" onclick="location.href='{% url 'tutorials:vd_vocabulary' %}'">
+                <div class="feature-icon green">🌱</div>
+                <div class="feature-content">
+                    <h3>Thực Hành Ngôn Ngữ Ký Hiệu</h3>
+                    <p>Luyện tập với các bài tập tương tác</p>
+                </div>
+            </div>
+            <a href="{% url 'tutorials:vd_vocabulary' %}" class="feature-card">
+                <div class="feature-icon purple">🎥</div>
+                <div class="feature-content">
+                    <h3>Nhận Diện Ngôn Ngữ Ký Hiệu</h3>
+                    <p>Thực hành nhận diện qua video</p>
+                </div>
+            </a>
+            <a href="{% url 'accounts:profile' %}" class="feature-card">
+                <div class="feature-icon orange">👥</div>
+                <div class="feature-content">
+                    <h3>Quản Lý Thông Tin Cá Nhân</h3>
+                    <p>Cập nhật thông tin và cài đặt</p>
+                </div>
+            </a>
+        </section>
+
+        <section class="bottom-section">
+            <div class="chart-section">
+                <h2 class="chart-title">Tiến Trình Học Tập</h2>
+                <div class="chart-container">
+                    <svg width="100%" height="100%" viewBox="0 0 400 200">
+                        <!-- Grid lines -->
+                        <defs>
+                            <pattern id="grid" width="40" height="20" patternUnits="userSpaceOnUse">
+                                <path d="M 40 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grid)" />
+                        
+                        <!-- Y-axis -->
+                        <line x1="40" y1="20" x2="40" y2="160" stroke="#64748b" stroke-width="2"/>
+                        
+                        <!-- X-axis -->
+                        <line x1="40" y1="160" x2="380" y2="160" stroke="#64748b" stroke-width="2"/>
+                        
+                        <!-- Y-axis labels -->
+                        <text x="30" y="25" text-anchor="end" font-size="10" fill="#64748b">100%</text>
+                        <text x="30" y="50" text-anchor="end" font-size="10" fill="#64748b">80%</text>
+                        <text x="30" y="75" text-anchor="end" font-size="10" fill="#64748b">60%</text>
+                        <text x="30" y="100" text-anchor="end" font-size="10" fill="#64748b">40%</text>
+                        <text x="30" y="125" text-anchor="end" font-size="10" fill="#64748b">20%</text>
+                        <text x="30" y="160" text-anchor="end" font-size="10" fill="#64748b">0%</text>
+                        
+                        <!-- X-axis labels -->
+                        <text x="60" y="175" text-anchor="middle" font-size="10" fill="#64748b">T1</text>
+                        <text x="100" y="175" text-anchor="middle" font-size="10" fill="#64748b">T2</text>
+                        <text x="140" y="175" text-anchor="middle" font-size="10" fill="#64748b">T3</text>
+                        <text x="180" y="175" text-anchor="middle" font-size="10" fill="#64748b">T4</text>
+                        <text x="220" y="175" text-anchor="middle" font-size="10" fill="#64748b">T5</text>
+                        <text x="260" y="175" text-anchor="middle" font-size="10" fill="#64748b">T6</text>
+                        <text x="300" y="175" text-anchor="middle" font-size="10" fill="#64748b">T7</text>
+                        <text x="340" y="175" text-anchor="middle" font-size="10" fill="#64748b">CN</text>
+                        
+                        <!-- Chart title -->
+                        <!-- <text x="200" y="15" text-anchor="middle" font-size="12" fill="#1e293b" font-weight="600">Điểm số hàng tuần</text> -->
+                        
+                        <!-- Data line -->
+                        <polyline
+                            fill="none"
+                            stroke="#3b82f6"
+                            stroke-width="3"
+                            points="60,140 100,120 140,130 180,115 220,105 260,95 300,115 340,100"
+                        />
+                        
+                        <!-- Data points -->
+                        <circle cx="60" cy="140" r="4" fill="#3b82f6"/>
+                        <circle cx="100" cy="120" r="4" fill="#3b82f6"/>
+                        <circle cx="140" cy="130" r="4" fill="#3b82f6"/>
+                        <circle cx="180" cy="115" r="4" fill="#3b82f6"/>
+                        <circle cx="220" cy="105" r="4" fill="#3b82f6"/>
+                        <circle cx="260" cy="95" r="4" fill="#3b82f6"/>
+                        <circle cx="300" cy="115" r="4" fill="#3b82f6"/>
+                        <circle cx="340" cy="100" r="4" fill="#3b82f6"/>
+                        
+                        <!-- Axis labels -->
+                        <!-- <text x="200" y="195" text-anchor="middle" font-size="11" fill="#64748b">Ngày trong tuần</text> -->
+                        <!-- <text x="15" y="90" text-anchor="middle" font-size="11" fill="#64748b" transform="rotate(-90, 15, 90)">Điểm số (%)</text> -->
+                    </svg>
+                </div>
+            </div>
+
+            <div class="recent-lessons">
+                <h2 class="lessons-title">Bài Học Gần Đây</h2>
+                <div class="lesson-item">
+                    <div class="lesson-info">
+                        <h4>Chữ cái cơ bản</h4>
+                        <p>15/02/2024</p>
+                    </div>
+                    <div class="lesson-progress high">100%</div>
+                </div>
+                <div class="lesson-item">
+                    <div class="lesson-info">
+                        <h4>Số đếm từ 1-10</h4>
+                        <p>14/02/2024</p>
+                    </div>
+                    <div class="lesson-progress medium">85%</div>
+                </div>
+                <div class="lesson-item">
+                    <div class="lesson-info">
+                        <h4>Từ vựng gia đình</h4>
+                        <p>13/02/2024</p>
+                    </div>
+                    <div class="lesson-progress low">75%</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>SignLearn</h3>
+                <p>Nền tảng học ngôn ngữ ký hiệu trực tuyến hàng đầu Việt Nam</p>
+            </div>
+            <div class="footer-section">
+                <h3>Khóa học</h3>
+                <ul class="footer-links">
+                    <li><a href="{% url 'tutorials:topic' %}">Khóa học cơ bản</a></li>
+                    <li><a href="{% url 'tutorials:topic' %}">Khóa học nâng cao</a></li>
+                    <li><a href="{% url 'tutorials:topic' %}">Học theo chủ đề</a></li>
+                    <li><a href="{% url 'tutorials:vd_vocabulary' %}">Từ điển</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Hỗ trợ</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Hướng dẫn sử dụng</a></li>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                    <li><a href="#">Phản hồi</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Theo dõi chúng tôi</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Youtube</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 SignLearn. Bảo lưu mọi quyền.</p>
+        </div>
+    </footer>
+</body>
+</html>

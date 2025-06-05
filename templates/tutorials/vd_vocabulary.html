@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giao tiếp cơ bản hàng ngày - SignLearn</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #3b82f6;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-item {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+        }
+
+        .nav-item:hover {
+            color: #3b82f6;
+            /* background: #f1f5f9; */
+        }
+
+        .nav-item.active {
+            color: #3b82f6;
+            /* background: #dbeafe; */
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-btn {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .notification-btn:hover {
+            background: #f1f5f9;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .breadcrumb {
+            background: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .breadcrumb-link {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .breadcrumb-separator {
+            color: #cbd5e1;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .lesson-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .lesson-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .lesson-subtitle {
+            font-size: 1.125rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+
+        .lesson-progress-info {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .video-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .video-placeholder {
+            color: white;
+            text-align: center;
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            backdrop-filter: blur(10px);
+            margin-bottom: 1rem;
+            transition: transform 0.3s;
+        }
+
+        .video-container:hover .play-button {
+            transform: scale(1.1);
+        }
+
+        .video-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-description {
+            opacity: 0.9;
+        }
+
+        .video-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .control-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .control-btn.primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .control-btn.primary:hover {
+            background: #2563eb;
+        }
+
+        .control-btn.secondary {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .control-btn.secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .lesson-steps {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .step-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+        }
+
+        .step-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-description {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .practice-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .practice-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .practice-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .practice-subtitle {
+            color: #64748b;
+        }
+
+        .quiz-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .question-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+        }
+
+        .answer-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .answer-option {
+            padding: 1rem;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .answer-option:hover {
+            border-color: #3b82f6;
+            background: #f0f7ff;
+        }
+
+        .answer-option.selected {
+            border-color: #3b82f6;
+            background: #dbeafe;
+        }
+
+        .option-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .option-text {
+            font-weight: 500;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #16a34a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 1.5rem;
+        }
+
+        .submit-btn:hover {
+            background: #15803d;
+        }
+
+        .submit-btn:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+        }
+
+        .nav-btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .nav-btn.prev {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .nav-btn.prev:hover {
+            background: #e2e8f0;
+        }
+
+        .nav-btn.next {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .nav-btn.next:hover {
+            background: #2563eb;
+        }
+        .footer {
+            background: #1e293b;
+            color: #cbd5e1;
+            padding: 3rem 2rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+        }
+
+        @media (max-width: 1024px) {
+            .lesson-steps {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav {
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .lesson-title {
+                font-size: 2rem;
+            }
+
+            .video-section {
+                padding: 1rem;
+            }
+
+            .video-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .answer-options {
+                grid-template-columns: 1fr;
+            }
+
+            .navigation-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            📝 SignLearn
+        </div>
+        <nav class="nav">
+            <a href="{% url 'learning:main_page' %}" class="nav-item">🏠 Trang chủ</a>
+            <a href="./topic.html" class="nav-item active">📚 Học tập</a>
+            <a href="./practice.html" class="nav-item">🧠 Luyện tập</a>
+            <a href="./ai.html" class="nav-item">🤖 AI</a>
+            <a href="./profile.html" class="nav-item">📊 Thống kê</a>
+        </nav>
+        <div class="user-actions">
+            <button class="notification-btn">🔔</button>
+            <div class="user-avatar">A</div>
+        </div>
+    </header>
+
+    <section class="breadcrumb">
+        <nav class="breadcrumb-nav">
+            <a href="#" class="breadcrumb-link">Học tập</a>
+            <span class="breadcrumb-separator">></span>
+            <a href="vocabulary.html" class="breadcrumb-link">Giao tiếp cơ bản</a>
+            <span class="breadcrumb-separator">></span>
+            <span>Xin chào</span>
+        </nav>
+    </section>
+
+    <main class="main-content">
+        <div class="lesson-header">
+            <h1 class="lesson-title">Giao tiếp cơ bản hàng ngày</h1>
+            <p class="lesson-subtitle">Học cách chào hỏi và giao tiếp cơ bản trong ngôn ngữ ký hiệu</p>
+            <p class="lesson-progress-info">Bài học hiện tại: 14%</p>
+        </div>
+
+        <section class="video-section">
+            <div class="video-container" onclick="playVideo()">
+                <div class="video-placeholder">
+                    <div class="play-button">▶</div>
+                    <div class="video-title">Xin chào</div>
+                    <div class="video-description">Học cách chào hỏi cơ bản trong ngôn ngữ ký hiệu</div>
+                </div>
+            </div>
+            <div class="video-controls">
+                <button class="control-btn secondary">⏮ Quay lại</button>
+                <button class="control-btn primary" onclick="playVideo()">▶ Phát video</button>
+                <button class="control-btn secondary">⏭ Tiếp theo</button>
+            </div>
+        </section>
+
+        <section class="lesson-steps">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h3 class="step-title">Xem video</h3>
+                <p class="step-description">Quan sát cách thực hiện động tác trong video</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h3 class="step-title">Luyện tập</h3>
+                <p class="step-description">Thực hành lại động tác theo video hướng dẫn</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h3 class="step-title">Kiểm tra</h3>
+                <p class="step-description">Hoàn thành bài kiểm tra để củng cố kiến thức</p>
+            </div>
+        </section>
+
+        <!-- <section class="practice-section">
+            <div class="practice-header">
+                <h2 class="practice-title">Chọn đáp án đúng</h2>
+                <p class="practice-subtitle">Ký hiệu nào thể hiện "Xin chào"?</p>
+            </div>
+            <div class="quiz-container">
+                <div class="question-card">
+                    <p class="question-text">Ký hiệu nào thể hiện "Xin chào"?</p>
+                    <div class="answer-options">
+                        <div class="answer-option" onclick="selectOption(this)">
+                            <div class="option-icon">🤚</div>
+                            <div class="option-text">Vẫy tay</div>
+                        </div>
+                        <div class="answer-option" onclick="selectOption(this)">
+                            <div class="option-icon">👋</div>
+                            <div class="option-text">Chào tay</div>
+                        </div>
+                        <div class="answer-option" onclick="selectOption(this)">
+                            <div class="option-icon">👏</div>
+                            <div class="option-text">Vỗ tay</div>
+                        </div>
+                        <div class="answer-option" onclick="selectOption(this)">
+                            <div class="option-icon">✋</div>
+                            <div class="option-text">Giơ tay</div>
+                        </div>
+                    </div>
+                    <button class="submit-btn" onclick="submitAnswer()" disabled>Kiểm tra</button>
+                </div>
+            </div>
+        </section> -->
+
+        <nav class="navigation-buttons">
+            <a href="vocabulary.html" class="nav-btn prev">
+                ⬅ Quay lại danh sách
+            </a>
+            <a href="#" class="nav-btn next">
+                Bài tiếp theo ➡
+            </a>
+        </nav>
+    </main>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>SignLearn</h3>
+                <p>Nền tảng học ngôn ngữ ký hiệu trực tuyến hàng đầu Việt Nam</p>
+            </div>
+            <div class="footer-section">
+                <h3>Khóa học</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Khóa học cơ bản</a></li>
+                    <li><a href="#">Khóa học nâng cao</a></li>
+                    <li><a href="#">Học theo chủ đề</a></li>
+                    <li><a href="#">Từ điển</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Hỗ trợ</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Hướng dẫn sử dụng</a></li>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                    <li><a href="#">Phản hồi</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Theo dõi chúng tôi</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Youtube</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 SignLearn. Bảo lưu mọi quyền.</p>
+        </div>
+    </footer>
+
+    <script>
+        let selectedOption = null;
+
+        function playVideo() {
+            alert('Video đang được phát... (Demo)');
+        }
+
+        function selectOption(element) {
+            // Remove selection from all options
+            document.querySelectorAll('.answer-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selection to clicked option
+            element.classList.add('selected');
+            selectedOption = element;
+            
+            // Enable submit button
+            document.querySelector('.submit-btn').disabled = false;
+        }
+
+        function submitAnswer() {
+            if (selectedOption) {
+                const optionText = selectedOption.querySelector('.option-text').textContent;
+                if (optionText === 'Chào tay') {
+                    alert('Chính xác! Bạn đã chọn đúng đáp án.');
+                } else {
+                    alert('Chưa chính xác. Hãy thử lại!');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

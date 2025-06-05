@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chủ đề học tập - SignLearn</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #3b82f6;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-item {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-item:hover {
+            color: #3b82f6;
+        }
+
+        .nav-item.active {
+            color: #3b82f6;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-btn {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 2rem;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .topic-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .topic-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .topic-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .topic-icon.blue {
+            background: #dbeafe;
+            color: #3b82f6;
+        }
+
+        .topic-icon.green {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .topic-icon.purple {
+            background: #ede9fe;
+            color: #7c3aed;
+        }
+
+        .topic-icon.orange {
+            background: #fed7aa;
+            color: #ea580c;
+        }
+
+        .topic-icon.red {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .topic-icon.yellow {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .topic-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+        }
+
+        .topic-lessons {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .topic-progress {
+            margin-top: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f1f5f9;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #3b82f6;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .featured-courses {
+            margin-bottom: 4rem;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .course-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .course-image {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .course-content {
+            padding: 1.5rem;
+        }
+
+        .course-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .course-meta {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .course-button {
+            width: 100%;
+            padding: 0.75rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .course-button:hover {
+            background: #2563eb;
+        }
+
+        .stats-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .chart-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        .rank-list {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .rank-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .rank-item:last-child {
+            border-bottom: none;
+        }
+
+        .rank-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .rank-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .rank-number.top {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .rank-score {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .footer {
+            background: #1e293b;
+            color: #cbd5e1;
+            padding: 3rem 2rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav {
+                gap: 1rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .main-content {
+                padding: 2rem 1rem;
+            }
+
+            .topics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-section {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            📝 SignLearn
+        </div>
+        <nav class="nav">
+            <a href="{% url 'learning:main_page' %}" class="nav-item">🏠 Trang chủ</a>
+            <a href="./topic.html" class="nav-item active">📚 Học tập</a>
+            <a href="./practice.html" class="nav-item">🧠 Luyện tập</a>
+            <a href="./ai.html" class="nav-item">🤖 AI</a>
+            <a href="./profile.html" class="nav-item">📊 Thống kê</a>
+        </nav>
+        <div class="user-actions">
+            <button class="notification-btn">🔔</button>
+            <div class="user-avatar">A</div>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <h1 class="hero-title">Học Ngôn Ngữ Ký Hiệu Trực Tuyến</h1>
+        <p class="hero-subtitle">Khám phá các chủ đề học tập thú vị và bắt đầu hành trình của bạn</p>
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="Tìm kiếm khóa học, chủ đề...">
+        </div>
+    </section>
+
+    <main class="main-content">
+        <section class="topics-section">
+            <h2 class="section-title">Chủ đề học tập</h2>
+            <div class="topics-grid">
+                <a href="{% url 'tutorials:vd_vocabulary' %}" class="topic-card-link">
+                    <div class="topic-card">
+                        <div class="topic-header">
+                            <div class="topic-icon blue">📖</div>
+                            <div>
+                                <div class="topic-title">Chữ cái cơ bản</div>
+                                <div class="topic-lessons">26 bài học</div>
+                            </div>
+                        </div>
+                        <div class="topic-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span>Tiến độ</span>
+                                <span>85%</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{% url 'tutorials:vd_vocabulary' %}" class="topic-card-link">
+                    <div class="topic-card">
+                        <div class="topic-header">
+                            <div class="topic-icon green">🔢</div>
+                            <div>
+                                <div class="topic-title">Số đếm</div>
+                                <div class="topic-lessons">10 bài học</div>
+                            </div>
+                        </div>
+                        <div class="topic-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 60%"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span>Tiến độ</span>
+                                <span>60%</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{% url 'tutorials:vd_vocabulary' %}" class="topic-card-link">
+                    <div class="topic-card">
+                        <div class="topic-header">
+                            <div class="topic-icon purple">👥</div>
+                            <div>
+                                <div class="topic-title">Gia đình</div>
+                                <div class="topic-lessons">15 bài học</div>
+                            </div>
+                        </div>
+                        <div class="topic-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 40%"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span>Tiến độ</span>
+                                <span>40%</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{% url 'tutorials:vd_vocabulary' %}" class="topic-card-link">
+                    <div class="topic-card">
+                        <div class="topic-header">
+                            <div class="topic-icon orange">⏰</div>
+                            <div>
+                                <div class="topic-title">Thời gian</div>
+                                <div class="topic-lessons">12 bài học</div>
+                            </div>
+                        </div>
+                        <div class="topic-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 25%"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span>Tiến độ</span>
+                                <span>25%</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{% url 'tutorials:vd_vocabulary' %}" class="topic-card-link">
+                    <div class="topic-card">
+                        <div class="topic-header">
+                            <div class="topic-icon red">😊</div>
+                            <div>
+                                <div class="topic-title">Cảm xúc</div>
+                                <div class="topic-lessons">18 bài học</div>
+                            </div>
+                        </div>
+                        <div class="topic-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 70%"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span>Tiến độ</span>
+                                <span>70%</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{% url 'tutorials:vd_vocabulary' %}" class="topic-card-link">
+                    <div class="topic-card">
+                        <div class="topic-header">
+                            <div class="topic-icon yellow">🌈</div>
+                            <div>
+                                <div class="topic-title">Màu sắc</div>
+                                <div class="topic-lessons">8 bài học</div>
+                            </div>
+                        </div>
+                        <div class="topic-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 90%"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span>Tiến độ</span>
+                                <span>90%</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section class="featured-courses">
+            <h2 class="section-title">Bài học nổi bật</h2>
+            <div class="courses-grid">
+                <div class="course-card">
+                    <div class="course-image">📹</div>
+                    <div class="course-content">
+                        <h3 class="course-title">Các từ chào hỏi cơ bản</h3>
+                        <p class="course-meta">5 phút • 25 học viên • Video</p>
+                        <button class="course-button">Bắt đầu học</button>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-image">🎯</div>
+                    <div class="course-content">
+                        <h3 class="course-title">Số điện thoại và địa chỉ</h3>
+                        <p class="course-meta">8 phút • 18 học viên • Tương tác</p>
+                        <button class="course-button">Bắt đầu học</button>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-image">🎭</div>
+                    <div class="course-content">
+                        <h3 class="course-title">Tự giới thiệu bản thân</h3>
+                        <p class="course-meta">6 phút • 32 học viên • Thực hành</p>
+                        <button class="course-button">Bắt đầu học</button>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-image">🎪</div>
+                    <div class="course-content">
+                        <h3 class="course-title">Các hoạt động thể thao</h3>
+                        <p class="course-meta">10 phút • 15 học viên • Video</p>
+                        <button class="course-button">Bắt đầu học</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats-section">
+            <div class="chart-section">
+                <h2 class="chart-title">Tiến độ học tập</h2>
+                <div class="chart-container">
+                    <svg width="100%" height="100%" viewBox="0 0 400 280">
+                        <!-- Grid -->
+                        <defs>
+                            <pattern id="grid" width="40" height="28" patternUnits="userSpaceOnUse">
+                                <path d="M 40 0 L 0 0 0 28" fill="none" stroke="#f1f5f9" stroke-width="1"/>
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grid)" />
+                        
+                        <!-- Axes -->
+                        <line x1="40" y1="20" x2="40" y2="240" stroke="#64748b" stroke-width="2"/>
+                        <line x1="40" y1="240" x2="380" y2="240" stroke="#64748b" stroke-width="2"/>
+                        
+                        <!-- Bars -->
+                        <rect x="60" y="180" width="30" height="60" fill="#3b82f6"/>
+                        <rect x="110" y="140" width="30" height="100" fill="#3b82f6"/>
+                        <rect x="160" y="160" width="30" height="80" fill="#3b82f6"/>
+                        <rect x="210" y="120" width="30" height="120" fill="#3b82f6"/>
+                        <rect x="260" y="100" width="30" height="140" fill="#3b82f6"/>
+                        <rect x="310" y="130" width="30" height="110" fill="#3b82f6"/>
+                        
+                        <!-- Labels -->
+                        <text x="75" y="255" text-anchor="middle" font-size="10" fill="#64748b">T2</text>
+                        <text x="125" y="255" text-anchor="middle" font-size="10" fill="#64748b">T3</text>
+                        <text x="175" y="255" text-anchor="middle" font-size="10" fill="#64748b">T4</text>
+                        <text x="225" y="255" text-anchor="middle" font-size="10" fill="#64748b">T5</text>
+                        <text x="275" y="255" text-anchor="middle" font-size="10" fill="#64748b">T6</text>
+                        <text x="325" y="255" text-anchor="middle" font-size="10" fill="#64748b">T7</text>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="rank-list">
+                <h2 class="chart-title">Xếp hạng theo điểm</h2>
+                
+                <div class="rank-item">
+                    <div class="rank-info">
+                        <div class="rank-number top">1</div>
+                        <span>Nguyễn Văn A</span>
+                    </div>
+                    <span class="rank-score">850 điểm</span>
+                </div>
+
+                <div class="rank-item">
+                    <div class="rank-info">
+                        <div class="rank-number top">2</div>
+                        <span>Trần Thị B</span>
+                    </div>
+                    <span class="rank-score">780 điểm</span>
+                </div>
+
+                <div class="rank-item">
+                    <div class="rank-info">
+                        <div class="rank-number top">3</div>
+                        <span>Lê Văn C</span>
+                    </div>
+                    <span class="rank-score">720 điểm</span>
+                </div>
+
+                <div class="rank-item">
+                    <div class="rank-info">
+                        <div class="rank-number">4</div>
+                        <span>Phạm Thị D</span>
+                    </div>
+                    <span class="rank-score">680 điểm</span>
+                </div>
+
+                <div class="rank-item">
+                    <div class="rank-info">
+                        <div class="rank-number">5</div>
+                        <span>Hoàng Văn E</span>
+                    </div>
+                    <span class="rank-score">650 điểm</span>
+                </div>
+
+                <div class="rank-item">
+                    <div class="rank-info">
+                        <div class="rank-number">6</div>
+                        <span>Vũ Thị F</span>
+                    </div>
+                    <span class="rank-score">620 điểm</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>SignLearn</h3>
+                <p>Nền tảng học ngôn ngữ ký hiệu trực tuyến hàng đầu Việt Nam</p>
+            </div>
+            <div class="footer-section">
+                <h3>Khóa học</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Khóa học cơ bản</a></li>
+                    <li><a href="#">Khóa học nâng cao</a></li>
+                    <li><a href="#">Học theo chủ đề</a></li>
+                    <li><a href="#">Từ điển</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Hỗ trợ</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Hướng dẫn sử dụng</a></li>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                    <li><a href="#">Phản hồi</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Theo dõi chúng tôi</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Youtube</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 SignLearn. Bảo lưu mọi quyền.</p>
+        </div>
+    </footer>
+</body>
+</html>

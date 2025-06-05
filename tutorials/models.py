@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 class Category(models.Model):
     """Model for tutorial categories"""
@@ -56,4 +57,26 @@ class UserExerciseAttempt(models.Model):
     attempt_time = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f"{self.user.username} - {self.tutorial.title}" 
+        return f"{self.user.username} - {self.tutorial.title}"
+
+class TutorialProgress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    tutorial = models.ForeignKey(Tutorial, on_delete=models.CASCADE)
+    completed = models.BooleanField(default=False)
+    progress = models.IntegerField(default=0)  # Progress percentage
+    time_spent = models.IntegerField(default=0)  # Time spent in seconds
+    points_earned = models.IntegerField(default=0)
+    completed_at = models.DateTimeField(null=True, blank=True)
+    last_accessed = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'tutorial')
+        ordering = ['-last_accessed']
+
+    def __str__(self):
+        return f"{self.user.username} - {self.tutorial.title}"
+
+    def save(self, *args, **kwargs):
+        if self.completed and not self.completed_at:
+            self.completed_at = timezone.now()
+        super().save(*args, **kwargs) 

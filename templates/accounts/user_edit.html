@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}Edit Profile - Sign Language Learning{% endblock %}
+{% block title %}Edit {{ target_user.username }}'s Profile - Sign Language Learning{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
@@ -9,7 +9,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h2 class="text-center">Edit Profile</h2>
+                    <h2 class="text-center">Edit {{ target_user.username }}'s Profile</h2>
                 </div>
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data">
@@ -17,7 +17,7 @@
                         {{ form|crispy }}
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary">Save Changes</button>
-                            <a href="{% url 'accounts:profile' %}" class="btn btn-outline-secondary">Cancel</a>
+                            <a href="{% url 'accounts:user_detail' target_user.id %}" class="btn btn-outline-secondary">Cancel</a>
                         </div>
                     </form>
                 </div>

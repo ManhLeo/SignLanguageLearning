@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ target_user.username }}'s Profile - Sign Language Learning{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    {% if user_profile.profile_picture %}
+                        <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="rounded-circle img-fluid mb-3" style="max-width: 200px;">
+                    {% else %}
+                        <img src="{% static 'images/default-profile.png' %}" alt="Default Profile Picture" class="rounded-circle img-fluid mb-3" style="max-width: 200px;">
+                    {% endif %}
+                    <h3>{{ target_user.get_full_name|default:target_user.username }}</h3>
+                    <p class="text-muted">@{{ target_user.username }}</p>
+                    <div class="btn-group" role="group">
+                        <a href="{% url 'accounts:user_edit' target_user.id %}" class="btn btn-warning">Edit</a>
+                        <a href="{% url 'accounts:user_delete' target_user.id %}" class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Profile Information</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Username:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            {{ target_user.username }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>First Name:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            {{ target_user.first_name|default:"Not set" }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Last Name:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            {{ target_user.last_name|default:"Not set" }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Email:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            {{ target_user.email }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Date Joined:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            {{ target_user.date_joined|date:"F d, Y" }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Last Login:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            {{ target_user.last_login|date:"F d, Y H:i" }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Bio:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            {{ user_profile.bio|default:"No bio yet" }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h4>Learning Progress</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Completed Tutorials</h5>
+                            <ul class="list-group">
+                                {% for tutorial in completed_tutorials %}
+                                    <li class="list-group-item">{{ tutorial.title }}</li>
+                                {% empty %}
+                                    <li class="list-group-item">No tutorials completed yet</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Recent Progress</h5>
+                            <ul class="list-group">
+                                {% for progress in learning_progress|slice:":5" %}
+                                    <li class="list-group-item">
+                                        {{ progress.tutorial.title }}
+                                        <span class="badge bg-{{ progress.completed|yesno:'success,secondary' }} float-end">
+                                            {{ progress.completed|yesno:'Completed,In Progress' }}
+                                        </span>
+                                    </li>
+                                {% empty %}
+                                    <li class="list-group-item">No progress recorded yet</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,42 +1,781 @@
-{% extends 'base.html' %}
-{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ sơ cá nhân - SignLearn</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-{% block title %}Profile - Sign Language Learning{% endblock %}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
 
-{% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body text-center">
-                    {% if user.userprofile.profile_picture %}
-                        <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="rounded-circle img-fluid mb-3" style="max-width: 150px;">
-                    {% else %}
-                        <img src="{% static 'images/default-profile.png' %}" alt="Default Profile Picture" class="rounded-circle img-fluid mb-3" style="max-width: 150px;">
-                    {% endif %}
-                    <h3>{{ user.username }}</h3>
-                    <p class="text-muted">Member since {{ user.date_joined|date:"F Y" }}</p>
-                    <a href="{% url 'accounts:edit_profile' %}" class="btn btn-primary">Edit Profile</a>
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #3b82f6;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-item {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-item:hover {
+            color: #3b82f6;
+        }
+
+        .nav-item.active {
+            color: #3b82f6;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-btn {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .profile-header {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-welcome {
+            margin-bottom: 2rem;
+        }
+
+        .welcome-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-subtitle {
+            color: #64748b;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-number.blue {
+            color: #3b82f6;
+        }
+
+        .stat-number.green {
+            color: #10b981;
+        }
+
+        .stat-number.purple {
+            color: #7c3aed;
+        }
+
+        .stat-number.orange {
+            color: #f59e0b;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .lesson-card {
+            background: #f8fafc;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .lesson-image {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(45deg, #e0e7ff, #c7d2fe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .lesson-content {
+            padding: 1rem;
+        }
+
+        .lesson-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .lesson-meta {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .lesson-btn {
+            width: 100%;
+            padding: 0.5rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .lesson-btn:hover {
+            background: #2563eb;
+        }
+
+        .progress-chart {
+            height: 200px;
+            background: #f8fafc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .chart-placeholder {
+            color: #9ca3af;
+            font-size: 3rem;
+        }
+
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+
+        .achievement-item {
+            background: #fef3c7;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .achievement-item:hover {
+            transform: scale(1.05);
+        }
+
+        .achievement-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-title {
+            font-weight: 600;
+            color: #92400e;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .achievement-desc {
+            color: #b45309;
+            font-size: 0.75rem;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .profile-info {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+        }
+
+        .profile-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-email {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-stat {
+            text-align: center;
+        }
+
+        .profile-stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+
+        .profile-stat-label {
+            color: #64748b;
+            font-size: 0.75rem;
+        }
+
+        .edit-profile-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #f1f5f9;
+            color: #64748b;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .edit-profile-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .recent-activity {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e0e7ff;
+            color: #3730a3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 500;
+            color: #1e293b;
+            font-size: 0.875rem;
+        }
+
+        .activity-time {
+            color: #64748b;
+            font-size: 0.75rem;
+        }
+        .footer {
+            background: #1e293b;
+            color: #cbd5e1;
+            padding: 3rem 2rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+        }
+
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .lessons-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .achievement-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            📝 SignLearn
+        </div>
+        <nav class="nav">
+            <a href="{% url 'learning:main_page' %}" class="nav-item">🏠 Trang chủ</a>
+            <a href="#" class="nav-item">📚 Học tập</a>
+            <a href="#" class="nav-item">🧠 Luyện tập</a>
+            <a href="{% url 'recognition:home' %}" class="nav-item">🤖 AI</a>
+            <a href="{% url 'accounts:profile' %}" class="nav-item active">👤 Hồ sơ</a>
+        </nav>
+        <div class="user-actions">
+            <button class="notification-btn">🔔</button>
+            <div class="user-avatar">A</div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="profile-header">
+            <div class="profile-welcome">
+                <h1 class="welcome-title">Xin chào, {{ user.get_full_name|default:user.username }}</h1>
+                <p class="welcome-subtitle">Chào mừng bạn quay lại học tập</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number blue">24</div>
+                    <div class="stat-label">Bài học hoàn thành</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number green">12 giờ</div>
+                    <div class="stat-label">Thời gian học</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number purple">850</div>
+                    <div class="stat-label">Điểm số</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number orange">Cấp 5</div>
+                    <div class="stat-label">Trình độ</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h4>Profile Information</h4>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <h5>Bio</h5>
-                        <p>{{ user.userprofile.bio|default:"No bio provided." }}</p>
+
+        <div class="content-grid">
+            <div class="main-content">
+                <div class="section-card">
+                    <h2 class="section-title">Bài học gần đây</h2>
+                    <div class="lessons-grid">
+                        <div class="lesson-card">
+                            <div class="lesson-image">📖</div>
+                            <div class="lesson-content">
+                                <h3 class="lesson-title">Chữ cái cơ bản</h3>
+                                <p class="lesson-meta">85% hoàn thành • 2024.12.15</p>
+                                <button class="lesson-btn">Tiếp tục học</button>
+                            </div>
+                        </div>
+
+                        <div class="lesson-card">
+                            <div class="lesson-image">🔢</div>
+                            <div class="lesson-content">
+                                <h3 class="lesson-title">Số và đếm</h3>
+                                <p class="lesson-meta">60% hoàn thành • 2024.12.14</p>
+                                <button class="lesson-btn">Tiếp tục học</button>
+                            </div>
+                        </div>
+
+                        <div class="lesson-card">
+                            <div class="lesson-image">👥</div>
+                            <div class="lesson-content">
+                                <h3 class="lesson-title">Gia đình cơ bản</h3>
+                                <p class="lesson-meta">40% hoàn thành • 2024.12.13</p>
+                                <button class="lesson-btn">Tiếp tục học</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <h5>Email</h5>
-                        <p>{{ user.email|default:"No email provided." }}</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 class="section-title">Tiến trình học tập</h2>
+                    <div class="progress-chart">
+                        <div class="chart-placeholder">📊</div>
+                    </div>
+                    <svg width="100%" height="200" viewBox="0 0 600 200" style="margin-top: -200px;">
+                        <!-- Grid -->
+                        <defs>
+                            <pattern id="grid" width="60" height="25" patternUnits="userSpaceOnUse">
+                                <path d="M 60 0 L 0 0 0 25" fill="none" stroke="#f1f5f9" stroke-width="1"/>
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grid)" />
+                        
+                        <!-- Line chart -->
+                        <polyline
+                            fill="none"
+                            stroke="#3b82f6"
+                            stroke-width="3"
+                            points="50,150 120,130 190,140 260,110 330,95 400,105 470,85 540,90"
+                        />
+                        
+                        <!-- Data points -->
+                        <circle cx="50" cy="150" r="4" fill="#3b82f6"/>
+                        <circle cx="120" cy="130" r="4" fill="#3b82f6"/>
+                        <circle cx="190" cy="140" r="4" fill="#3b82f6"/>
+                        <circle cx="260" cy="110" r="4" fill="#3b82f6"/>
+                        <circle cx="330" cy="95" r="4" fill="#3b82f6"/>
+                        <circle cx="400" cy="105" r="4" fill="#3b82f6"/>
+                        <circle cx="470" cy="85" r="4" fill="#3b82f6"/>
+                        <circle cx="540" cy="90" r="4" fill="#3b82f6"/>
+                        
+                        <!-- Labels -->
+                        <text x="50" y="190" text-anchor="middle" font-size="10" fill="#64748b">T2</text>
+                        <text x="120" y="190" text-anchor="middle" font-size="10" fill="#64748b">T3</text>
+                        <text x="190" y="190" text-anchor="middle" font-size="10" fill="#64748b">T4</text>
+                        <text x="260" y="190" text-anchor="middle" font-size="10" fill="#64748b">T5</text>
+                        <text x="330" y="190" text-anchor="middle" font-size="10" fill="#64748b">T6</text>
+                        <text x="400" y="190" text-anchor="middle" font-size="10" fill="#64748b">T7</text>
+                        <text x="470" y="190" text-anchor="middle" font-size="10" fill="#64748b">CN</text>
+                        <text x="540" y="190" text-anchor="middle" font-size="10" fill="#64748b">T2</text>
+                    </svg>
+                </div>
+
+                <div class="section-card">
+                    <h2 class="section-title">Thành tích học tập</h2>
+                    <div class="achievement-grid">
+                        <div class="achievement-item">
+                            <div class="achievement-icon">🏆</div>
+                            <div class="achievement-title">Người mới bắt đầu</div>
+                            <div class="achievement-desc">Hoàn thành bài học đầu tiên</div>
+                        </div>
+
+                        <div class="achievement-item">
+                            <div class="achievement-icon">⭐</div>
+                            <div class="achievement-title">Siêu cố gắng</div>
+                            <div class="achievement-desc">Học 7 ngày liên tiếp</div>
+                        </div>
+
+                        <div class="achievement-item">
+                            <div class="achievement-icon">🎯</div>
+                            <div class="achievement-title">Chuyên gia gia đình</div>
+                            <div class="achievement-desc">Hoàn thành chủ đề gia đình</div>
+                        </div>
+
+                        <div class="achievement-item">
+                            <div class="achievement-icon">🔥</div>
+                            <div class="achievement-title">Streak Master</div>
+                            <div class="achievement-desc">15 ngày học liên tục</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="profile-info">
+                    <div class="profile-avatar">{{ user.username|first|upper }}</div>
+                    <h3 class="profile-name">{{ user.get_full_name|default:user.username }}</h3>
+                    <p class="profile-email">{{ user.email }}</p>
+                    
+                    <div class="profile-stats">
+                        <div class="profile-stat">
+                            <div class="profile-stat-number">147</div>
+                            <div class="profile-stat-label">Ngày học</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-number">15</div>
+                            <div class="profile-stat-label">Streak</div>
+                        </div>
+                    </div>
+                    
+                    <a href="{% url 'accounts:edit_profile' %}" class="edit-profile-btn">Chỉnh sửa hồ sơ</a>
+                </div>
+
+                <div class="recent-activity">
+                    <h3 class="section-title">Hoạt động gần đây</h3>
+                    <ul class="activity-list">
+                        <li class="activity-item">
+                            <div class="activity-icon">📖</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Hoàn thành bài "Chữ cái A-Z"</div>
+                                <div class="activity-time">2 giờ trước</div>
+                            </div>
+                        </li>
+
+                        <li class="activity-item">
+                            <div class="activity-icon">🏆</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Đạt thành tích "Streak Master"</div>
+                                <div class="activity-time">1 ngày trước</div>
+                            </div>
+                        </li>
+
+                        <li class="activity-item">
+                            <div class="activity-icon">📊</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Hoàn thành bài kiểm tra từ vựng</div>
+                                <div class="activity-time">2 ngày trước</div>
+                            </div>
+                        </li>
+
+                        <li class="activity-item">
+                            <div class="activity-icon">⭐</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Lên cấp độ 5</div>
+                                <div class="activity-time">3 ngày trước</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="section-card">
+                    <h3 class="section-title">Thống kê cá nhân</h3>
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="color: #64748b; font-size: 0.875rem;">Từ vựng đã học</span>
+                            <span style="font-weight: 600; color: #1e293b;">156/200</span>
+                        </div>
+                        <div style="width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                            <div style="height: 100%; background: #10b981; border-radius: 4px; width: 78%;"></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="color: #64748b; font-size: 0.875rem;">Bài tập đã làm</span>
+                            <span style="font-weight: 600; color: #1e293b;">89/120</span>
+                        </div>
+                        <div style="width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                            <div style="height: 100%; background: #3b82f6; border-radius: 4px; width: 74%;"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="color: #64748b; font-size: 0.875rem;">Kiểm tra đã qua</span>
+                            <span style="font-weight: 600; color: #1e293b;">12/15</span>
+                        </div>
+                        <div style="width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                            <div style="height: 100%; background: #f59e0b; border-radius: 4px; width: 80%;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-{% endblock %} 
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>SignLearn</h3>
+                <p>Nền tảng học ngôn ngữ ký hiệu trực tuyến hàng đầu Việt Nam</p>
+            </div>
+            <div class="footer-section">
+                <h3>Khóa học</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Khóa học cơ bản</a></li>
+                    <li><a href="#">Khóa học nâng cao</a></li>
+                    <li><a href="#">Học theo chủ đề</a></li>
+                    <li><a href="#">Từ điển</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Hỗ trợ</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Hướng dẫn sử dụng</a></li>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                    <li><a href="#">Phản hồi</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Theo dõi chúng tôi</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Youtube</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 SignLearn. Bảo lưu mọi quyền.</p>
+        </div>
+    </footer>
+</body>
+</html>

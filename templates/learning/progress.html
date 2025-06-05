@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load learning_tags %}
 
 {% block title %}Learning Progress - Sign Language Learning{% endblock %}
 
@@ -55,11 +56,7 @@
                                     <td>{{ tutorial.attempts }}</td>
                                     <td>{{ tutorial.correct_attempts }}</td>
                                     <td>
-                                        {% if tutorial.attempts > 0 %}
-                                            {{ tutorial.correct_attempts|divisibleby:tutorial.attempts|multiply:100|floatformat:1 }}%
-                                        {% else %}
-                                            0%
-                                        {% endif %}
+                                        {{ tutorial.correct_attempts|percentage:tutorial.attempts|floatformat:1 }}%
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -74,7 +71,7 @@
 
     <div class="row mt-4">
         <div class="col-md-12 text-center">
-            <a href="{% url 'tutorials:list' %}" class="btn btn-primary">Continue Learning</a>
+            <a href="{% url 'tutorials:tutorial_list' %}" class="btn btn-primary">Continue Learning</a>
             <a href="{% url 'recognition:practice' %}" class="btn btn-success">Practice Now</a>
         </div>
     </div>

@@ -1,0 +1,192 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignLearn - Học ngôn ngữ ký hiệu</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <div class="logo-icon">SL</div>
+                    <span class="logo-text">SignLearn</span>
+                </div>
+                
+                <!-- <nav class="nav">
+                    <a href="#" class="nav-link">Trang chủ</a>
+                    <a href="#" class="nav-link">Khóa học</a>
+                    <a href="#" class="nav-link">Giới thiệu</a>
+                    <a href="#" class="nav-link">Liên hệ</a>
+                </nav> -->
+                
+                <div class="auth-buttons">
+                    <a href="{% url 'accounts:login' %}" class="btn btn-outline">Đăng nhập</a>
+                    <a href="{% url 'accounts:register' %}" class="btn btn-outline">Đăng ký</a>
+                </div>
+                
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        Khám phá thế giới ngôn ngữ ký hiệu
+                    </h1>
+                    <p class="hero-description">
+                        Học ngôn ngữ ký hiệu một cách dễ dàng và hiệu quả với cộng đồng 
+                        học viên trên toàn thế giới
+                    </p>
+                    <div class="hero-buttons">
+                        <!-- <button class="btn btn-primary btn-large">
+                            Bắt đầu miễn phí
+                        </button> -->
+                        <a href="{% url 'accounts:login' %}" class="btn btn-primary btn-large">Bắt đầu miễn phí</a>
+                        <button class="btn btn-outline btn-large">
+                            <i class="fas fa-play"></i>
+                            Xem video giới thiệu
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="hero-image">
+                    <div class="image-container">
+                        <img src="https://cdn-i.vtcnews.vn/files/f1/2010/09/04/istock000009877186mediumjpg.jpg" 
+                             alt="Học viên đang học ngôn ngữ ký hiệu">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose SignLearn Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    Tại sao chọn Sign Learn?
+                </h2>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="feature-title">
+                        Học mọi lúc mọi nơi
+                    </h3>
+                    <p class="feature-description">
+                        Truy cập khóa học từ mọi thiết bị, mọi nơi 
+                        và mọi thời điểm được bạn muốn
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="feature-title">
+                        Giáo trình chuẩn quốc tế
+                    </h3>
+                    <p class="feature-description">
+                        Nội dung học được biên soạn bởi các 
+                        chuyên gia hàng đầu trong lĩnh vực
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="feature-title">
+                        Cộng đồng hỗ trợ
+                    </h3>
+                    <p class="feature-description">
+                        Tham gia cộng đồng học viên sôi nổi, 
+                        cùng nhau phát triển
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">10K+</div>
+                    <div class="stat-label">Học viên</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Bài học</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Quốc gia</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Hài lòng</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+     <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>SignLearn</h3>
+                <p>Nền tảng học ngôn ngữ ký hiệu trực tuyến hàng đầu Việt Nam</p>
+            </div>
+            <div class="footer-section">
+                <h3>Khóa học</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Khóa học cơ bản</a></li>
+                    <li><a href="#">Khóa học nâng cao</a></li>
+                    <li><a href="#">Học theo chủ đề</a></li>
+                    <li><a href="#">Từ điển</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Hỗ trợ</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Hướng dẫn sử dụng</a></li>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                    <li><a href="#">Phản hồi</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Theo dõi chúng tôi</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Youtube</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 SignLearn. Bảo lưu mọi quyền.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

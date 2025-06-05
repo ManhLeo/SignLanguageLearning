@@ -8,7 +8,7 @@ from .models import Assessment, UserProgress
 
 def home(request):
     """Home page view"""
-    return render(request, 'learning/home.html')
+    return render(request, 'index.html')
 
 @login_required
 def dashboard(request):
@@ -69,4 +69,8 @@ def progress_data(request):
         'recognition_stats': recognition_stats,
     }
     
-    return render(request, 'learning/progress_data.html', context) 
+    return render(request, 'learning/progress_data.html', context)
+
+@login_required
+def main_page(request):
+    return render(request, 'learning/main_page.html') 

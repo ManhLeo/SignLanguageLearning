@@ -1,33 +1,51 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SignLearn - Học Ngôn Ngữ Ký Hiệu</title>
-    <link rel="stylesheet" href="main_page.css">
+    <title>{% block title %}SignLearn - Học Ngôn Ngữ Ký Hiệu{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/main_page.css' %}">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
     <header class="header">
         <div class="logo">
-            📝 SignLearn
+            <div class="logo-icon">SL</div>
+            <span class="logo-text">SignLearn</span>
         </div>
         <nav class="nav">
-            <a href="#" class="nav-item active">🏠 Trang chủ</a>
+            <a href="{% url 'learning:main_page' %}" class="nav-item {% if request.resolver_match.url_name == 'main_page' %}active{% endif %}">🏠 Trang chủ</a>
             <a href="./topic.html" class="nav-item">📚 Học tập</a>
             <a href="./practice.html" class="nav-item">🧠 Luyện tập</a>
-            <a href="./ai.html" class="nav-item">🤖 AI</a>
+            <a href="{% url 'recognition:home' %}" class="nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">🤖 AI</a>
             <a href="./profile.html" class="nav-item">📊 Thống kê</a>
         </nav>
         <div class="user-actions">
             <button class="notification-btn">🔔</button>
-            <div class="user-avatar">A</div>
+            {% if user.userprofile.profile_picture %}
+                <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="profile-picture-preview1" id="profile-preview">
+            {% else %}
+                <div class="profile-picture-preview1 bg-secondary text-white d-flex align-items-center justify-content-center" id="profile-preview">
+                    {{ user.username|first|upper }}
+                </div>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <form action="{% url 'accounts:logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline">Đăng xuất</button>
+                </form>
+            {% endif %}
         </div>
     </header>
 
     <main class="main-content">
+        {% block content %}
         <section class="welcome-section">
-            <h1 class="welcome-title">Xin chào, Nguyễn Văn A</h1>
-            <p class="welcome-subtitle">Hãy tiếp tục hành trình học tập của bạn!</p>
+            <div class="welcome-message">
+                <h1>Xin chào, {{ user.get_full_name|default:user.username }}</h1>
+                <p>Chào mừng bạn đến với SignLearn</p>
+            </div>
         </section>
 
         <section class="stats-grid">
@@ -77,20 +95,20 @@
                     <p>Luyện tập với các bài tập tương tác</p>
                 </div>
             </div>
-            <div class="feature-card" onclick="location.href='./ai.html'">
+            <a href="{% url 'recognition:home' %}" class="feature-card">
                 <div class="feature-icon purple">🎥</div>
                 <div class="feature-content">
                     <h3>Nhận Diện Ngôn Ngữ Ký Hiệu</h3>
                     <p>Thực hành nhận diện qua video</p>
                 </div>
-            </div>
-            <div class="feature-card" onclick="location.href='./profile.html'">
+            </a>
+            <a href="{% url 'accounts:profile' %}" class="feature-card">
                 <div class="feature-icon orange">👥</div>
                 <div class="feature-content">
                     <h3>Quản Lý Thông Tin Cá Nhân</h3>
                     <p>Cập nhật thông tin và cài đặt</p>
                 </div>
-            </div>
+            </a>
         </section>
 
         <section class="bottom-section">
@@ -130,9 +148,6 @@
                         <text x="300" y="175" text-anchor="middle" font-size="10" fill="#64748b">T7</text>
                         <text x="340" y="175" text-anchor="middle" font-size="10" fill="#64748b">CN</text>
                         
-                        <!-- Chart title -->
-                        <!-- <text x="200" y="15" text-anchor="middle" font-size="12" fill="#1e293b" font-weight="600">Điểm số hàng tuần</text> -->
-                        
                         <!-- Data line -->
                         <polyline
                             fill="none"
@@ -150,10 +165,6 @@
                         <circle cx="260" cy="95" r="4" fill="#3b82f6"/>
                         <circle cx="300" cy="115" r="4" fill="#3b82f6"/>
                         <circle cx="340" cy="100" r="4" fill="#3b82f6"/>
-                        
-                        <!-- Axis labels -->
-                        <!-- <text x="200" y="195" text-anchor="middle" font-size="11" fill="#64748b">Ngày trong tuần</text> -->
-                        <!-- <text x="15" y="90" text-anchor="middle" font-size="11" fill="#64748b" transform="rotate(-90, 15, 90)">Điểm số (%)</text> -->
                     </svg>
                 </div>
             </div>
@@ -183,6 +194,7 @@
                 </div>
             </div>
         </section>
+        {% endblock %}
     </main>
 
     <footer class="footer">
@@ -223,5 +235,7 @@
             <p>© 2024 SignLearn. Bảo lưu mọi quyền.</p>
         </div>
     </footer>
+
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

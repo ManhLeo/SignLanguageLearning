@@ -1,71 +1,33 @@
-{% extends 'base.html' %}
+{% extends 'learning/main_page.html' %}
+{% load static %}
 
-{% block title %}{{ tutorial.title }} - Sign Language Learning{% endblock %}
+{% block title %}{{ tutorial.title }} - Chi tiết bài học{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h1 class="card-title">{{ tutorial.title }}</h1>
-                    <div class="mb-3">
-                        <span class="badge bg-primary">{{ tutorial.category.name }}</span>
-                        <span class="badge bg-secondary">{{ tutorial.difficulty.name }}</span>
-                    </div>
-                    <div class="ratio ratio-16x9 mb-4">
-                        <iframe src="{{ tutorial.video_url }}" allowfullscreen></iframe>
-                    </div>
-                    <p class="card-text">{{ tutorial.description }}</p>
-                </div>
+<div class="main-content">
+    <div class="container py-5">
+        <h1>{{ tutorial.title }}</h1>
+        
+        {# You can add video player, description, exercises, etc. here later #}
+        <p>{{ tutorial.description }}</p>
+        
+        {% if tutorial.video_url %}
+            <div class="video-container">
+                <iframe width="560" height="315" src="{{ tutorial.video_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
+        {% endif %}
 
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Exercises</h5>
-                </div>
-                <div class="card-body">
-                    {% for exercise in tutorial.exercise_set.all %}
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <h6 class="card-title">Question {{ forloop.counter }}</h6>
-                                <p class="card-text">{{ exercise.question }}</p>
-                                <form method="post" action="{% url 'tutorials:submit_exercise' tutorial.id exercise.id %}">
-                                    {% csrf_token %}
-                                    <div class="mb-3">
-                                        <input type="text" name="answer" class="form-control" placeholder="Your answer">
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Submit Answer</button>
-                                </form>
-                            </div>
-                        </div>
-                    {% empty %}
-                        <p class="text-muted">No exercises available for this tutorial.</p>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
+        {# Add sections for exercises, related vocabulary, etc. #}
 
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Related Tutorials</h5>
-                </div>
-                <div class="list-group list-group-flush">
-                    {% for related in related_tutorials %}
-                        <a href="{% url 'tutorials:detail' related.id %}" class="list-group-item list-group-item-action">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">{{ related.title }}</h6>
-                                <small class="text-muted">{{ related.difficulty.name }}</small>
-                            </div>
-                            <small class="text-muted">{{ related.category.name }}</small>
-                        </a>
-                    {% empty %}
-                        <p class="text-muted p-3">No related tutorials available.</p>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
+        <h2 class="mt-5">Bài học liên quan</h2>
+        <ul>
+            {% for related_tutorial in related_tutorials %}
+                <li><a href="{% url 'tutorials:tutorial_detail' related_tutorial.id %}">{{ related_tutorial.title }}</a></li>
+            {% empty %}
+                <li>Không có bài học liên quan nào.</li>
+            {% endfor %}
+        </ul>
+
     </div>
 </div>
 {% endblock %} 

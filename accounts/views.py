@@ -8,6 +8,9 @@ from django.http import HttpResponseForbidden
 from .forms import UserRegistrationForm, UserProfileForm, UserUpdateForm, CustomPasswordChangeForm
 from .models import UserProfile, LearningProgress
 from tutorials.models import Tutorial
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import render, redirect
 
 def is_superuser(user):
     return user.is_superuser
@@ -19,6 +22,9 @@ def register(request):
             user = form.save()
             login(request, user)  # Log the user in after registration
             messages.success(request, f'Account created for {user.username}!')
+            # Redirect superusers to management dashboard, others to main page
+            if user.is_superuser:
+                return redirect('management:management_main')
             return redirect('learning:main_page')
     else:
         form = UserRegistrationForm()
@@ -131,3 +137,19 @@ def user_delete(request, user_id):
         messages.success(request, f'User {username} has been deleted.')
         return redirect('accounts:user_list')
     return render(request, 'accounts/user_confirm_delete.html', {'target_user': user}) 
+def custom_login(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = authenticate(
+                username=form.cleaned_data.get('username'),
+                password=form.cleaned_data.get('password')
+            )
+            if user is not None:
+                login(request, user)
+                if user.is_superuser:
+                    return redirect('management:management_main')
+                return redirect('learning:main_page')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'accounts/login.html', {'form': form})

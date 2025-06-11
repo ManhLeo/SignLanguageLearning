@@ -1,0 +1,129 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignLearn - {{ page_title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/management-main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/management-wordform.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">SL</div>
+            <span class="logo-text">SignLearn</span>
+        </div>
+        <nav class="nav">
+            <a href="{% url 'learning:main_page' %}" class="nav-item">🏠 Trang chủ</a>
+            <a href="{% url 'tutorials:tutorial_list' %}" class="nav-item active">📚 Học tập</a>
+            <a href="{% url 'tutorials:practice_home' %}" class="nav-item">🧠 Luyện tập</a>
+            <a href="{% url 'recognition:home' %}" class="nav-item">🤖 AI</a>
+            <a href="{% url 'accounts:profile' %}" class="nav-item">📊 Thống kê</a>
+        </nav>
+        <div class="user-actions">
+            <button class="notification-btn">🔔</button>
+            {% if user.is_superuser %}
+            <a href="/management/" class="admin-btn">
+                <span class="admin-icon">⚙️</span>
+                <span class="admin-text">Quản lý</span>
+            </a>
+            {% endif %}
+            {% if user.userprofile.profile_picture %}
+                <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="user-avatar" id="profile-preview">
+            {% else %}
+                <div class="user-avatar bg-secondary text-white d-flex align-items-center justify-content-center" id="profile-preview">
+                    {{ user.username|first|upper }}
+                </div>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <form action="{% url 'accounts:logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline">Đăng xuất</button>
+                </form>
+            {% endif %}
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1>{{ page_title }}</h1>
+            </div>
+
+            <form method="post" class="word-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Từ vựng</label>
+                    <input type="text" id="title" name="title" value="{{ tutorial.title|default_if_none:'' }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="video_url">URL Video</label>
+                    <input type="url" id="video_url" name="video_url" value="{{ tutorial.video_url|default_if_none:'' }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="category">Chủ đề</label>
+                    <select id="category" name="category" required>
+                        <option value="">Chọn chủ đề</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}" {% if tutorial.category_id == category.id %}selected{% endif %}>{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="difficulty">Mức độ</label>
+                    <select id="difficulty" name="difficulty" required>
+                        <option value="">Chọn mức độ</option>
+                        {% for difficulty in difficulties %}
+                            <option value="{{ difficulty.id }}" {% if tutorial.difficulty_id == difficulty.id %}selected{% endif %}>{{ difficulty.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                <a href="{{ cancel_url }}" class="btn btn-secondary">Hủy</a>
+            </form>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>SignLearn</h4>
+                <p>Giúp mọi người tiếp cận với ngôn ngữ ký hiệu để dễ dàng hơn thông qua công nghệ.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Sản phẩm</h4>
+                <a href="#">Tính năng</a>
+                <a href="#">Bảng giá</a>
+                <a href="#">Hướng dẫn</a>
+                <a href="#">Cập nhật</a>
+            </div>
+            <div class="footer-section">
+                <h4>Công ty</h4>
+                <a href="#">Về chúng tôi</a>
+                <a href="#">Blog</a>
+                <a href="#">Đối tác</a>
+                <a href="#">Liên hệ</a>
+            </div>
+            <div class="footer-section">
+                <h4>Hỗ trợ</h4>
+                <a href="#">Trung tâm trợ giúp</a>
+                <a href="#">Điều khoản</a>
+                <a href="#">Bảo mật</a>
+                <a href="#">Cookie</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 SignLearn. Đã đăng ký bản quyền.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'management/js/management-main.js' %}"></script>
+</body>
+</html>

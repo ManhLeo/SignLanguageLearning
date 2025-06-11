@@ -1,23 +1,61 @@
-{% extends 'base.html' %}
+{% extends 'main_page.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
 
-{% block title %}Edit Profile - Sign Language Learning{% endblock %}
+{% block title %}Chỉnh sửa hồ sơ - Sign Language Learning{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/edit_profile.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="text-center">Edit Profile</h2>
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="text-center mb-0">Chỉnh sửa hồ sơ</h2>
                 </div>
                 <div class="card-body">
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                         {% csrf_token %}
-                        {{ form|crispy }}
+                        
+                        <!-- Profile Picture Preview -->
+                        <div class="text-center mb-4">
+                            {% if user.userprofile.profile_picture %}
+                                <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="profile-picture-preview" id="profile-preview">
+                            {% else %}
+                                <div class="profile-picture-container" id="profile-preview">
+                                    <span class="initials">{{ user.username|first|upper }}</span>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Form Fields -->
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                {{ form.first_name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6 form-group">
+                                {{ form.last_name|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            {{ form.email|as_crispy_field }}
+                        </div>
+                        
+                        <div class="form-group">
+                            {{ form.bio|as_crispy_field }}
+                        </div>
+                        
+                        <div class="form-group">
+                            {{ form.profile_picture|as_crispy_field }}
+                        </div>
+
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                            <a href="{% url 'accounts:profile' %}" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-save">Lưu thay đổi</button>
+                            <a href="{% url 'accounts:profile' %}" class="btn btn-cancel">Hủy</a>
                         </div>
                     </form>
                 </div>
@@ -25,4 +63,25 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Preview profile picture before upload
+    document.getElementById('id_profile_picture').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('profile-preview');
+                if (preview.tagName === 'IMG') {
+                    preview.src = e.target.result;
+                } else {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Profile Picture" class="profile-picture-preview">`;
+                }
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
 {% endblock %} 

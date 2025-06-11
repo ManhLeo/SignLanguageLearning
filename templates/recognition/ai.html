@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Học Ngôn Ngữ Ký Hiệu Thông Qua AI - SignLearn</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main_page.css' %}">
     <style>
         * {
             margin: 0;
@@ -33,9 +33,25 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            color: #3b82f6;
-            font-size: 1.25rem;
-            font-weight: 600;
+        }
+
+        .logo-icon {
+            background-color: #4a90e2;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
         }
 
         .nav {
@@ -703,24 +719,51 @@
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+            
+            
         }
+        .profile-picture-preview {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                object-fit: cover;
+                margin-bottom: 1rem;
+            }
     </style>
 </head>
 <body>
     <header class="header">
         <div class="logo">
-            📝 SignLearn
+            <div class="logo-icon">SL</div>
+            <span class="logo-text">SignLearn</span>
         </div>
         <nav class="nav">
             <a href="{% url 'learning:main_page' %}" class="nav-item">🏠 Trang chủ</a>
-            <a href="#" class="nav-item">📚 Học tập</a>
-            <a href="#" class="nav-item">🧠 Luyện tập</a>
+            <a href="{% url 'tutorials:tutorial_list' %}" class="nav-item">📚 Học tập</a>
+            <a href="{% url 'tutorials:practice_home' %}" class="nav-item">🧠 Luyện tập</a>
             <a href="{% url 'recognition:home' %}" class="nav-item active">🤖 AI</a>
-            <a href="./profile.html" class="nav-item">📊 Thống kê</a>
+            <a href="{% url 'accounts:profile' %}" class="nav-item">📊 Thống kê</a>
         </nav>
         <div class="user-actions">
             <button class="notification-btn">🔔</button>
-            <div class="user-avatar">A</div>
+            
+            {# User Avatar/Profile Picture #}
+            {% if user.userprofile.profile_picture %}
+                <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="user-avatar" id="profile-preview">
+            {% else %}
+                {# Default Avatar with username initial #}
+                <div class="user-avatar bg-secondary text-white d-flex align-items-center justify-content-center" id="profile-preview">
+                    {{ user.username|first|upper }}
+                </div>
+            {% endif %}
+            
+            {# Logout Form #}
+            {% if user.is_authenticated %}
+                <form action="{% url 'accounts:logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline">Đăng xuất</button>
+                </form>
+            {% endif %}
         </div>
     </header>
 
@@ -728,7 +771,7 @@
         <section class="hero-section">
             <h1 class="hero-title">Học Ngôn Ngữ Ký Hiệu Thông Qua AI</h1>
             <p class="hero-subtitle">Công nghệ nhận diện cử chỉ giúp bạn học tập hiệu quả hơn với tính năng phản hồi thời gian thực</p>
-            <button class="hero-button">🚀 Bắt đầu ngay</button>
+            <!-- <button  class="hero-button">🚀 Bắt đầu ngay</button> -->
         </section>
         <div class="video-section">
             <video id="video" autoplay playsinline></video>

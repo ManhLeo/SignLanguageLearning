@@ -6,7 +6,6 @@ class Category(models.Model):
     """Model for tutorial categories"""
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return self.name
@@ -24,6 +23,7 @@ class Difficulty(models.Model):
 
     class Meta:
         verbose_name_plural = "Difficulties"
+        db_table = 'tutorials_difficultylevel'
 
 class Tutorial(models.Model):
     """Model for sign language tutorials"""
@@ -34,7 +34,6 @@ class Tutorial(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='tutorials')
     difficulty = models.ForeignKey(Difficulty, on_delete=models.CASCADE, related_name='tutorials')
     duration = models.IntegerField(help_text='Duration in minutes')
-    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):

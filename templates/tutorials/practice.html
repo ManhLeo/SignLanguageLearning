@@ -1,0 +1,720 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thực Hành Ngôn Ngữ Ký Hiệu - SignLearn</title>
+    <link rel="stylesheet" href="{% static 'css/main_page.css' %}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            background-color: #4a90e2;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-item {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-item:hover {
+            color: #3b82f6;
+        }
+
+        .nav-item.active {
+            color: #3b82f6;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-btn {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-subtitle {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+        }
+
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .practice-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .practice-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-color: #3b82f6;
+        }
+
+        .practice-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+        }
+
+        .practice-icon.blue {
+            background: #dbeafe;
+            color: #3b82f6;
+        }
+
+        .practice-icon.yellow {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .practice-icon.green {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .practice-icon.purple {
+            background: #ede9fe;
+            color: #7c3aed;
+        }
+
+        .practice-icon.red {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .practice-icon.orange {
+            background: #fed7aa;
+            color: #ea580c;
+        }
+
+        .practice-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .practice-lessons {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .practice-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .practice-btn:hover {
+            background: #2563eb;
+        }
+
+        .quiz-section {
+            margin-top: 3rem;
+        }
+
+        .quiz-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .quiz-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .quiz-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .quiz-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .quiz-btn:hover {
+            background: #4f46e5;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .progress-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .progress-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .progress-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .progress-label {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .progress-value {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f1f5f9;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #3b82f6;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .achievements {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .achievement-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .achievement-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #fbbf24;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+        }
+
+        .achievement-text {
+            flex: 1;
+        }
+
+        .achievement-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .achievement-desc {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .leaderboard {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .leaderboard-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .rank-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .rank-number.top {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .rank-score {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 0.875rem;
+        }
+        .footer {
+            background: #1e293b;
+            color: #cbd5e1;
+            padding: 3rem 2rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+        }
+
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .practice-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quiz-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">SL</div>
+            <span class="logo-text">SignLearn</span>
+        </div>
+        <nav class="nav">
+            <a href="{% url 'learning:main_page' %}" class="nav-item">🏠 Trang chủ</a>
+            <a href="{% url 'tutorials:tutorial_list' %}" class="nav-item">📚 Học tập</a>
+            <a href="{% url 'tutorials:practice_home' %}" class="nav-item active">🧠 Luyện tập</a>
+            <a href="{% url 'recognition:home' %}" class="nav-item">🤖 AI</a>
+            <a href="{% url 'accounts:profile' %}" class="nav-item">📊 Thống kê</a>
+        </nav>
+        <div class="user-actions">
+            <button class="notification-btn">🔔</button>
+
+            {% if user.userprofile.profile_picture %}
+                <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="user-avatar" id="profile-preview">
+            {% else %}
+                <div class="user-avatar bg-secondary text-white d-flex align-items-center justify-content: center;" id="profile-preview">
+                    {{ user.username|first|upper }}
+                </div>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+                <form action="{% url 'accounts:logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline">Đăng xuất</button>
+                </form>
+            {% endif %}
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="main-content">
+            <div class="hero-section">
+                <h1 class="hero-title">Thực Hành Ngôn Ngữ Ký Hiệu</h1>
+                <p class="hero-subtitle">Nâng cao kỹ năng ngôn ngữ ký hiệu của bạn thông qua các bài tập tương tác</p>
+            </div>
+
+            <section class="practice-section">
+                <h2 class="section-title">Luyện tập cơ bản theo chủ đề</h2>
+                <div class="practice-grid">
+                    {% for topic in topics %}
+                    <a href="{% url 'tutorials:practice_detail' topic.id %}" class="practice-card-link">
+                        <div class="practice-card">
+                            <div class="practice-icon blue">🧠</div>
+                            <h3 class="practice-title">{{ topic.name }}</h3>
+                            <p class="practice-lessons"></p>
+                            <button class="practice-btn">Bắt đầu</button>
+                        </div>
+                    </a>
+                    {% empty %}
+                    <p>Chưa có chủ đề luyện tập nào.</p>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <section class="quiz-section">
+                <h2 class="section-title">Bài Kiểm Tra</h2>
+                <div class="quiz-grid">
+                    <div class="quiz-card">
+                        <div class="quiz-header">
+                            <span>📋</span>
+                            <h3>Kiểm tra từ vựng</h3>
+                        </div>
+                        <div class="quiz-meta">
+                            <span>🕐 15 phút</span>
+                            <span>📊 30 câu hỏi</span>
+                            <span>⭐ Cơ bản</span>
+                        </div>
+                        <a href="{% url 'tutorials:exam_page' %}" class="quiz-btn" style="text-decoration: none; display: block; text-align: center;">Làm bài</a>
+                    </div>
+
+                    <div class="quiz-card">
+                        <div class="quiz-header">
+                            <span>📋</span>
+                            <h3>Kiểm tra hội thoại</h3>
+                        </div>
+                        <div class="quiz-meta">
+                            <span>🕐 20 phút</span>
+                            <span>📊 20 câu hỏi</span>
+                            <span>⭐ Trung bình</span>
+                        </div>
+                        <a href="{% url 'tutorials:exam_page' %}" class="quiz-btn" style="text-decoration: none; display: block; text-align: center;">Làm bài</a>
+                    </div>
+
+                    <div class="quiz-card">
+                        <div class="quiz-header">
+                            <span>📋</span>
+                            <h3>Kiểm tra tổng hợp</h3>
+                        </div>
+                        <div class="quiz-meta">
+                            <span>🕐 45 phút</span>
+                            <span>📊 50 câu hỏi</span>
+                            <span>⭐ Nâng cao</span>
+                        </div>
+                        <a href="{% url 'tutorials:exam_page' %}" class="quiz-btn" style="text-decoration: none; display: block; text-align: center;">Làm bài</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="sidebar">
+            <div class="progress-card">
+                <h3 class="progress-title">Tiến độ học tập</h3>
+                <div class="progress-item">
+                    <span class="progress-label">Chữ cái</span>
+                    <span class="progress-value">8/12</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 67%"></div>
+                </div>
+                
+                <div class="progress-item">
+                    <span class="progress-label">Từ vựng</span>
+                    <span class="progress-value">15/24</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 63%"></div>
+                </div>
+            </div>
+
+            <div class="achievements">
+                <h3 class="progress-title">Thành tích gần đây</h3>
+                <div class="achievement-item">
+                    <div class="achievement-icon">🏆</div>
+                    <div class="achievement-text">
+                        <div class="achievement-title">Hoàn thành bài kiểm tra từ vựng</div>
+                        <div class="achievement-desc">2 giờ trước</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="leaderboard">
+                <h3 class="progress-title">Bảng xếp hạng tuần</h3>
+                <div class="leaderboard-item">
+                    <div class="leaderboard-info">
+                        <div class="rank-number top">1</div>
+                        <span>Nguyễn Văn A</span>
+                    </div>
+                    <span class="rank-score">2,450</span>
+                </div>
+
+                <div class="leaderboard-item">
+                    <div class="leaderboard-info">
+                        <div class="rank-number top">2</div>
+                        <span>Trần Thị B</span>
+                    </div>
+                    <span class="rank-score">2,280</span>
+                </div>
+
+                <div class="leaderboard-item">
+                    <div class="leaderboard-info">
+                        <div class="rank-number top">3</div>
+                        <span>Lê Văn C</span>
+                    </div>
+                    <span class="rank-score">2,150</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>SignLearn</h3>
+                <p>Nền tảng học ngôn ngữ ký hiệu trực tuyến hàng đầu Việt Nam</p>
+            </div>
+            <div class="footer-section">
+                <h3>Khóa học</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Khóa học cơ bản</a></li>
+                    <li><a href="#">Khóa học nâng cao</a></li>
+                    <li><a href="#">Học theo chủ đề</a></li>
+                    <li><a href="#">Từ điển</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Hỗ trợ</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Hướng dẫn sử dụng</a></li>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                    <li><a href="#">Phản hồi</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Theo dõi chúng tôi</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Youtube</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 SignLearn. Bảo lưu mọi quyền.</p>
+        </div>
+    </footer>
+</body>
+</html>

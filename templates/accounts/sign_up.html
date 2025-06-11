@@ -14,9 +14,7 @@
         <div class="container">
             <div class="nav-wrapper">
                 <div class="logo">
-                    <div class="logo-icon">
-                        <i class="fas fa-language"></i>
-                    </div>
+                    <div class="logo-icon">SL</div>
                     <span class="logo-text">SignLearn</span>
                 </div>
                 
@@ -41,7 +39,7 @@
                     <form method="post" class="form">
                         {% csrf_token %}
                         <div class="form-group">
-                            <label for="id_username" class="form-label">Tên đăng nhập</label>
+                            <label for="id_username" class="form-label">Tên</label>
                             <div class="input-wrapper">
                                 <i class="fa-solid fa-address-card input-icon"></i>
                                 <input 
@@ -49,7 +47,7 @@
                                     name="username"
                                     id="id_username" 
                                     class="form-input" 
-                                    placeholder="Nhập tên đăng nhập của bạn"
+                                    placeholder="Nhập tên của bạn"
                                     required
                                 >
                             </div>

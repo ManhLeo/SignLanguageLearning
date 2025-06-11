@@ -1,0 +1,510 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Kiểm Tra - SignLearn</title>
+    <link rel="stylesheet" href="{% static 'css/main_page.css' %}">
+    <style>
+        /* Styles from exam_page.html and original exam.html combined */
+        .exam-container {
+            max-width: 1200px; /* Adjusted max-width to fit the original content layout */
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Keeping relevant styles from the original exam.html */
+        .exam-header {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .exam-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .exam-subtitle {
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+
+        .exam-meta {
+            display: flex;
+            gap: 2rem;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .exam-info {
+             background: #fef3c7;
+             border-left: 4px solid #f59e0b;
+             padding: 1rem;
+             margin-bottom: 2rem;
+             border-radius: 0 8px 8px 0;
+         }
+
+         .exam-info h4 {
+             color: #92400e;
+             font-weight: 600;
+             margin-bottom: 0.5rem;
+         }
+
+         .exam-info p {
+             color: #b45309;
+             font-size: 0.875rem;
+         }
+
+        .exam-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 12px;
+            padding: 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .question-header {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .question-number {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+
+        .question-timer {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .video-section {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .video-container {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 6rem 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .video-placeholder {
+            color: #9ca3af;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .play-button:hover {
+            background: #2563eb;
+        }
+
+        .video-duration {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+
+        .question-content {
+            padding: 0 2rem 2rem;
+        }
+
+        .question-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .question-text {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            transition: border-color 0.3s;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .nav-btn {
+            background: none;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            color: #3b82f6;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #f1f5f9;
+            border-color: #3b82f6;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .progress-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .progress-stats {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .question-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .question-dot.current {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .question-dot.answered {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .question-dot.unanswered {
+            background: #e2e8f0;
+            color: #64748b;
+        }
+
+        .submit-section {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .submit-btn {
+            padding: 0.75rem 3rem;
+            background: #16a34a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.125rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #15803d;
+        }
+
+        @media (min-width: 1024px) {
+            .exam-content {
+                grid-template-columns: 1fr 300px;
+            }
+        }
+
+        /* Basic styles from main_page.css are linked, but ensuring exam-specific styles are present */
+        /* Note: Some base styles like * and body are already covered by main_page.css or can be omitted if main_page.css is comprehensive */
+
+    </style>
+</head>
+<body>
+    {% comment %} Include header or navigation if necessary, or add it directly {% endcomment %}
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">SL</div>
+            <span class="logo-text">SignLearn</span>
+        </div>
+        <nav class="nav">
+            <a href="{% url 'learning:main_page' %}" class="nav-item">🏠 Trang chủ</a>
+            <a href="{% url 'tutorials:tutorial_list' %}" class="nav-item">📚 Học tập</a>
+            <a href="{% url 'tutorials:practice_home' %}" class="nav-item active">🧠 Luyện tập</a>
+            <a href="{% url 'recognition:home' %}" class="nav-item">🤖 AI</a>
+            <a href="{% url 'accounts:profile' %}" class="nav-item">📊 Thống kê</a>
+        </nav>
+        <div class="user-actions">
+            <button class="notification-btn">🔔</button>
+
+            {% if user.userprofile.profile_picture %}
+                <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="user-avatar" id="profile-preview">
+            {% else %}
+                <div class="user-avatar bg-secondary text-white d-flex align-items-center justify-content: center;" id="profile-preview">
+                    {{ user.username|first|upper }}
+                </div>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+                <form action="{% url 'accounts:logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline">Đăng xuất</button>
+                </form>
+            {% endif %}
+        </div>
+    </header>
+
+    <div class="exam-container">
+        {% comment %} Content from the original exam.html starts here {% endcomment %}
+        <header class="exam-header">
+            <h1 class="exam-title">Bài Kiểm Tra Ngôn Ngữ Ký Hiệu</h1>
+            <p class="exam-subtitle">Thực hiện bài kiểm tra nhận diện ngôn ngữ ký hiệu của bạn</p>
+            <div class="exam-meta">
+                <div class="meta-item">
+                    <span>📝</span>
+                    <span>Kiểm Tra Ngôn Ngữ Ký Hiệu - Cấp độ Cơ bản</span>
+                </div>
+                <div class="meta-item">
+                    <span>⏱️</span>
+                    <span>Thời gian làm bài: 15 phút</span>
+                </div>
+                <div class="meta-item">
+                    <span>📊</span>
+                    <span>10 câu hỏi</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="exam-info">
+            <h4>Hướng dẫn làm bài:</h4>
+            <p>• Xem video và thực hiện động tác ký hiệu tương ứng</p>
+            <p>• Hệ thống sẽ tự động nhận diện và chấm điểm</p>
+            <p>• Mỗi câu hỏi có thể thực hiện lại tối đa 3 lần</p>
+        </div>
+
+        <div class="exam-content">
+            <div class="question-card">
+                <div class="question-header">
+                    <span class="question-number">Câu 1/10: Nghĩa của hành động được diễn tả ở trên</span>
+                    <span class="question-timer">14:36</span>
+                </div>
+
+                <div class="video-section">
+                    <div class="video-container">
+                        <div class="video-placeholder">📹</div>
+                        <button class="play-button">▶</button>
+                        <div class="video-duration">14:36</div>
+                    </div>
+                </div>
+
+                <div class="question-content">
+                    <textarea
+                        class="answer-input"
+                        placeholder="Nhập kết quả nhận diện của bạn..."
+                    ></textarea>
+                </div>
+
+                <div class="navigation">
+                    <button class="nav-btn" disabled>
+                        ← Câu trước
+                    </button>
+
+                    <button class="nav-btn">
+                        Câu tiếp →
+                    </button>
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-header">
+                    <span class="progress-title">Tiến độ làm bài</span>
+                    <span class="progress-stats">Đã hoàn thành: 1/10 câu</span>
+                </div>
+
+                <div class="question-grid">
+                    <div class="question-dot current">1</div>
+                    <div class="question-dot unanswered">2</div>
+                    <div class="question-dot unanswered">3</div>
+                    <div class="question-dot unanswered">4</div>
+                    <div class="question-dot unanswered">5</div>
+                    <div class="question-dot unanswered">6</div>
+                    <div class="question-dot unanswered">7</div>
+                    <div class="question-dot unanswered">8</div>
+                    <div class="question-dot unanswered">9</div>
+                    <div class="question-dot unanswered">10</div>
+                </div>
+
+                <div class="submit-section">
+                    <p style="color: #64748b; margin-bottom: 1rem; font-size: 0.875rem;">
+                        Hãy kiểm tra lại trước khi nộp bài
+                    </p>
+                    <button class="submit-btn">Nộp bài</button>
+                </div>
+            </div>
+        </div>
+        {% comment %} Content from the original exam.html ends here {% endcomment %}
+    </div>
+
+    {% comment %} Include footer if necessary, or add it directly {% endcomment %}
+     <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>SignLearn</h3>
+                <p>Nền tảng học ngôn ngữ ký hiệu trực tuyến hàng đầu Việt Nam</p>
+            </div>
+            <div class="footer-section">
+                <h3>Khóa học</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Khóa học cơ bản</a></li>
+                    <li><a href="#">Khóa học nâng cao</a></li>
+                    <li><a href="#">Học theo chủ đề</a></li>
+                    <li><a href="#">Từ điển</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Hỗ trợ</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Hướng dẫn sử dụng</a></li>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                    <li><a href="#">Phản hồi</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Theo dõi chúng tôi</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Youtube</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 SignLearn. Bảo lưu mọi quyền.</p>
+        </div>
+    </footer>
+</body>
+</html>

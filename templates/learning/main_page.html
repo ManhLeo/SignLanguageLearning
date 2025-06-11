@@ -4,27 +4,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SignLearn - Học Ngôn Ngữ Ký Hiệu</title>
+    <title>{% block title %}SignLearn - Học Ngôn Ngữ Ký Hiệu{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/main_page.css' %}">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
     <header class="header">
         <div class="logo">
-            📝 SignLearn
+            <div class="logo-icon">SL</div>
+            <span class="logo-text">SignLearn</span>
         </div>
         <nav class="nav">
-            <a href="#" class="nav-item active">🏠 Trang chủ</a>
-            <a href="./topic.html" class="nav-item">📚 Học tập</a>
-            <a href="./practice.html" class="nav-item">🧠 Luyện tập</a>
+            <a href="{% url 'learning:main_page' %}" class="nav-item active">🏠 Trang chủ</a>
+            <a href="{% url 'tutorials:tutorial_list' %}" class="nav-item">📚 Học tập</a>
+            <a href="{% url 'tutorials:practice_home' %}" class="nav-item">🧠 Luyện tập</a>
             <a href="{% url 'recognition:home' %}" class="nav-item">🤖 AI</a>
-            <a href="./profile.html" class="nav-item">📊 Thống kê</a>
+            <a href="{% url 'accounts:profile' %}" class="nav-item">📊 Thống kê</a>
         </nav>
         <div class="user-actions">
             <button class="notification-btn">🔔</button>
-            {% if user_profile.profile_picture %}
-                <img src="{{ user_profile.profile_picture.url }}" alt="User Avatar" class="user-avatar">
+            {% if user.is_superuser %}
+            <a href="/management/" class="admin-btn">
+                <span class="admin-icon">⚙️</span>
+                <span class="admin-text">Quản lý</span>
+            </a>
+            {% endif %}
+            {% if user.userprofile.profile_picture %}
+                <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="user-avatar" id="profile-preview">
             {% else %}
-                <div class="user-avatar">{{ user.username|first|upper }}</div>
+                <div class="user-avatar bg-secondary text-white d-flex align-items-center justify-content: center;" id="profile-preview">
+                    {{ user.username|first|upper }}
+                </div>
             {% endif %}
             {% if user.is_authenticated %}
                 <form action="{% url 'accounts:logout' %}" method="post" style="display: inline;">
@@ -75,21 +85,20 @@
         </section>
 
         <section class="features-grid">
-            <div class="feature-card" onclick="location.href='./topic.html'">
-                <a href="./topic.html"></a>
+            <a href="{% url 'tutorials:tutorial_list' %}" class="feature-card">
                 <div class="feature-icon blue">📖</div>
                 <div class="feature-content">
                     <h3>Học Tập Ngôn Ngữ Ký Hiệu</h3>
                     <p>Bắt đầu học các bài học cơ bản</p>
                 </div>
-            </div>
-            <div class="feature-card" onclick="location.href='./practice.html'">
+            </a>
+            <a href="{% url 'tutorials:practice_home' %}" class="feature-card">
                 <div class="feature-icon green">🌱</div>
                 <div class="feature-content">
                     <h3>Thực Hành Ngôn Ngữ Ký Hiệu</h3>
                     <p>Luyện tập với các bài tập tương tác</p>
                 </div>
-            </div>
+            </a>
             <a href="{% url 'recognition:home' %}" class="feature-card">
                 <div class="feature-icon purple">🎥</div>
                 <div class="feature-content">
@@ -198,7 +207,7 @@
         </section>
     </main>
 
-    <footer class="footer">
+    <footer class ="footer">
         <div class="footer-content">
             <div class="footer-section">
                 <h3>SignLearn</h3>
@@ -236,5 +245,40 @@
             <p>© 2024 SignLearn. Bảo lưu mọi quyền.</p>
         </div>
     </footer>
+{% block extra_js %}{% endblock %}
+
+<style>
+.admin-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #3b82f6;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.admin-btn:hover {
+    background: #2563eb;
+}
+
+.admin-icon {
+    font-size: 1.25rem;
+}
+
+.admin-text {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .admin-text {
+        display: inline;
+    }
+}
+</style>
 </body>
 </html>

